@@ -9,6 +9,7 @@ services:
     depends_on:
       - mysql
       - php
+      - phpmyadmin
   php:
     build:
       context: dockerfiles
@@ -50,6 +51,19 @@ services:
     volumes:
       - ./src:/var/www/laravel
     entrypoint: ["php", "/var/www/laravel/artisan"]
+
+  node:
+    image: node:latest
+    working_dir: /var/www/laravel
+    volumes:
+      - ./src:/var/www/laravel
+    command: sh -c "npm install bootstrap && npm run dev"
+
+    ports:
+      - "5173:5173" # Если используете Vite для hot reload
+    environment:
+      - NODE_ENV=development
+
 
 volumes:
   db_data:

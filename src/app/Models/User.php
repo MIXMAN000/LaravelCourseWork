@@ -22,11 +22,40 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
+    public $timestamps = false;
+
+    public $fillable = [
+      'firstname',
+      'lastname',
+      'phone',
+      'email',
+      'password',
+    ];
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    function UserReview()
+    {
+      return $this->belongsTo(Review::class, 'id');
+    }
+
+    public function userBasket()
+    {
+      return $this->hasMany(Basket::class, 'id_user');
+    }
+
+    public function userOrders()
+    {
+      return $this->hasMany(Order::class, 'id_user');
+    }
+    
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'post_likes')->withTimestamps();
     }
 }

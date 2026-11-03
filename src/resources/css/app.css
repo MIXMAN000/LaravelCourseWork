@@ -10,3 +10,178 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+html, body{
+  height: 100%;
+  margin: 0;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main{
+  flex: 1;
+}
+
+footer{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 15px;
+
+  justify-content: center;
+  align-content: center;
+
+  margin-top: 30px;
+
+}
+
+footer sociality img{
+  width: 40px;
+  height: 40px;
+}
+
+#slider, #slider2{
+  display: grid;
+  grid-auto-columns: calc((100% - (15px * 3)) / 4);
+  grid-template-rows: 1fr;
+  gap: 15px;
+  grid-auto-flow: column;
+  overflow: hidden;
+  margin: 10px 20px;
+}
+
+.slider-wrapper{
+  display: flex;
+  flex: row;
+}
+
+
+
+
+.catalog-grid{
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  grid-template-rows: auto;
+  gap: 30px;
+
+  justify-content: start;
+  align-content: start;
+}
+
+.catalog
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 15px;
+
+}
+
+.cardGrid
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+
+  gap: 25px;
+
+  position: relative;
+
+  margin-bottom: 100px;
+}
+
+.cardGrid img
+{
+  width: 100%;
+}
+
+.cardGrid .image button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 2;
+  color: gray;
+}
+
+.cardGrid #nextBtn {
+  right: 1px;
+}
+
+.cardGrid #prevBtn {
+  left: 1px;
+}
+
+.cardGrid .miniImg
+{
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  position: absolute;
+  bottom: -60px;
+  left: 0px;
+
+}
+.cardGrid .miniImg img
+{
+  width: 60px;
+  height: 60px;
+
+}
+
+#userInfo{
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#userInfo p{
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  font-size: 12px;
+}
+
+.mymodal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid black;
+  
+  z-index: 100;
+
+  width: 50vw;
+  height: 70%;
+}
+
+.hidden 
+{
+  display: none;
+}
+
+.no-snippers::-webkit-outer-spin-button,
+.no-snippers::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+
+}
+
+.no-snippers{
+  width: 30px;
+  padding-left: 10px;
+}
+
+.basketCard{
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr;
+
+  gap: 10px;
+
+  
+}

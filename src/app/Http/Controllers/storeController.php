@@ -148,12 +148,12 @@ class storeController extends Controller
       return redirect()->route('orders')->with('success', 'Заказ успешно оформлен');
     }
 
-    public function search(Request $request)
-    {
+    // public function search(Request $request)
+    // {
 
-      $products
-      return view('catalog', [
-        '' => '',
-      ]);
-    }
+    //   $products
+    //   return view('catalog', [
+    //     '' => '',
+    //   ]);
+    // }
 }

@@ -17,6 +17,10 @@ Route::get('/catalog/sort', [catalogController::class, 'catalogSort'])->name('ca
 
 Route::get('/card/{id}', [catalogController::class, 'productCard'])->name('productCard');
 
+Route::get('/catalog/search', [catalogController::class, 'search'])->name('search');
+
+
+
 Route::get('/contact', [indexController::class, 'contact'])->name('contact');
 
 Route::get('/deliveryInfo', [indexController::class, 'deliveryInfo'])->name('deliveryInfo');

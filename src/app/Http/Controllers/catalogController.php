@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DB;
 use Illuminate\Http\Request;
 use App\Models\About_us;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Category;
+use function PHPUnit\Framework\isEmpty;
 
 class catalogController extends Controller
 {
@@ -20,6 +22,7 @@ class catalogController extends Controller
       'categories' => $categories,
       'products' => $products,
       'category_id' => 0,
+      'error' => null,
     ]);
   }
 
@@ -52,6 +55,7 @@ class catalogController extends Controller
       'categories' => $categories,
       'products' => $products,
       'category_id' => 0,
+      'error' => null,
     ]);
   }
 
@@ -81,17 +85,20 @@ class catalogController extends Controller
       'categories' => $categories,
       'products' => $products,
       'category_id' => $category_id,
+      'error' => null,
     ]);
   }
-  public function search()
+  public function search(Request $request)
   {
     $categories = Category::all();
-    $products = Product::
+    $products = Product::where('name_product', 'LIKE', '%'. $request->query('search') . '%')->get();
+
+
     return view('catalog', [
       'categories' => $categories,
       'products' => $products,
       'category_id' => 0,
-    ]);
+    ])->with('error', $products->isEmpty() ? 'Ничего не найдено' : null);
   }
 
   function productCard($idProduct)

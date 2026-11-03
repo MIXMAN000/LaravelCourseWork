@@ -2,6 +2,7 @@
 @section('title', 'Каталог')
 
 @section('content')
+
   <div class="h d-flex flex-row gap-3 p-4 m-4 mb-0 align-items-center justify-content-between">
     <h1 class="">Каталог</h1>
     <form action="{{ route('catalogSort') }}" method="get" class="d-flex flex-row gap-2">
@@ -38,6 +39,11 @@
       </form>
     </div>
     <div class="catalog border-1 border-black p-3 rounded-2">
+      @if ($error)
+        <div class="alert alert-warning w-100">
+            {{ $error }}
+        </div>
+      @endif
       @foreach ($products as $product)
         <a class="text-decoration-none" href="{{ route('productCard', $product->id_product) }}"><div class="card p-3 d-flex flex-column justify-content-between align-items-center">
           <img src="/images/products/{{ $product['img1'] }}" alt="{{ $product['name_product'] }}" class="card-img-top">

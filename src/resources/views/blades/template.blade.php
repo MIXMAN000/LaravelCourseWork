@@ -26,8 +26,9 @@
           <li><a href="{{ route('deliveryInfo') }}" class="nav-link px-2 text-white">Доставка и оплата</a></li>
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="get" action="#">
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-inline-flex gap-2" method="get" action="{{ route('search') }}">
           <input type="search" class="form-control form-control-dark" placeholder="Поиск" aria-label="Search" name="search">
+          <button class="btn btn-light" type="submit">🔍</button>
         </form>
         @guest
         <div class="text-end">

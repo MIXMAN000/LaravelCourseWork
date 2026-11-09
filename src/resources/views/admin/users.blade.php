@@ -1,0 +1,8 @@
+@extends('admin.layout')
+@section('title', 'Пользователи')
+@section('content')
+<div class="admin-page-heading"><div><p class="admin-eyebrow">Аккаунты</p><h1>Пользователи</h1><p>Полная информация и управление ролями.</p></div></div>
+<section class="admin-panel"><form class="admin-filters" method="get"><div class="search-control flex-grow-1"><svg><use href="#i-search"/></svg><input class="form-control" name="q" value="{{ request('q') }}" placeholder="Имя, телефон или электронная почта"></div><button class="btn btn-primary">Найти</button></form><div class="table-responsive"><table class="table admin-table align-middle mb-0"><thead><tr><th>ID</th><th>Пользователь</th><th>Телефон</th><th>Эл. почта</th><th>Заказов</th><th>Роль</th></tr></thead><tbody>
+@forelse($users as $user)<tr><td>#{{ $user->id }}</td><td><div class="user-cell"><span>{{ mb_strtoupper(mb_substr($user->firstname,0,1).mb_substr($user->lastname,0,1)) }}</span><strong>{{ $user->firstname }} {{ $user->lastname }}</strong></div></td><td>{{ $user->phone }}</td><td>{{ $user->email }}</td><td>{{ $user->user_orders_count }}</td><td><form method="post" action="{{ route('admin.users.role', $user) }}" class="role-form">@csrf @method('PATCH')<select class="form-select form-select-sm" name="role" onchange="this.form.submit()" @disabled(auth()->id() === $user->id)> <option value="user" @selected($user->role === 'user')>user</option><option value="admin" @selected($user->role === 'admin')>administrator</option></select></form></td></tr>@empty<tr><td colspan="6" class="empty-state">Пользователи не найдены.</td></tr>@endforelse
+</tbody></table></div><div class="panel-pagination">{{ $users->links() }}</div></section>
+@endsection

@@ -8,6 +8,7 @@
         <th>Номер заказа</th>
         <th>Способ оплаты</th>
         <th>Статус</th>
+        <th>Причина отмены</th>
         <th>Товары (шт)</th>
         <th>Дата оформления</th>
       </tr>
@@ -18,6 +19,7 @@
           <td>{{$order->id}}</td>
           <td>{{$order->payment_type}}</td>
           <td class="{{ $order->status === 'Доставлен' ? 'bg-success' : 'bg-danger'}}">{{$order->status}}</td>
+          <td>{{ $order->cancellation_reason }}</td>
           <td><button class="btn btn-primary" id="orderItems{{ $order->id }}" data-bs-toggle="modal" data-bs-target="#orderItems{{ $order->id }}">{{ $order->items()->count() }}</button></td>
           <td>{{$order->created_at}}</td>
         </tr>

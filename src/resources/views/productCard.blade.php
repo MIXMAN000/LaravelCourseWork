@@ -36,6 +36,8 @@
       <div class="counter d-flex flex-row gap-1 justify-asdfcontent-center align-items-center mb-3">
       @if ($user == false)
         <p>Что бы добавить товар в корзину, нужно <a href="{{ route('login') }}">авторизоваться</a></p>
+      @elseif ($product->inventory <= 0)
+        <div class="alert alert-secondary mb-0">Товар закончился</div>
       @elseif ($inBasket == true)
         <a href="{{ route('basket') }}" class="btn btn-primary">Уже в корзине </a>
       @else
@@ -43,7 +45,7 @@
       @csrf
         <button type="button" class="btn btn-light" id="btnMinus">-</button>
         <input type="text" hidden value="{{ $product->id_product }}" name="id_product">
-        <input type="number" class="m-0 no-snippers" id="counter" value="1" min="1" name="product_count">
+        <input type="number" class="m-0 no-snippers" id="counter" value="1" min="1" max="{{ $product->inventory }}" name="product_count">
         <button type="button" class="btn btn-light" id="btnPlus">+</button>
 
         <button type="submit" class="btn btn-primary">В корзину</button>
@@ -69,15 +71,22 @@
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   const counter = document.getElementById('counter');
-  let count = 1
+  const minusButton = document.getElementById('btnMinus');
+  const plusButton = document.getElementById('btnPlus');
 
-  document.getElementById('btnMinus').addEventListener('click', ()=>{
+  if (!counter || !minusButton || !plusButton) {
+    return;
+  }
+
+  minusButton.addEventListener('click', ()=>{
     if (counter.value > 1){
       counter.value--;
     }
   });
-  document.getElementById('btnPlus').addEventListener('click', ()=>{
-    counter.value++
+  plusButton.addEventListener('click', ()=>{
+    if (Number(counter.value) < Number(counter.max)) {
+      counter.value++;
+    }
   });
 })
 </script>

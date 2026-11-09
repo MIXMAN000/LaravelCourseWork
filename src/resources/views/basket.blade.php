@@ -19,13 +19,33 @@
             @if (session('success'))
               <div class="alert alert-success w-100">{{ session('success') }}</div>
             @endif
+            @if (isset($errors) && $errors->any())
+              <div class="alert alert-danger mx-4">
+                @foreach ($errors->all() as $error)
+                  <div>{{ $error }}</div>
+                @endforeach
+              </div>
+            @endif
           @foreach ($baskets as $basket)
-            <div class="rounded bg-white m-4 p-4 basketCard">
+            @php
+              $isSoldOut = !$basket->basketProduct || $basket->basketProduct->inventory <= 0;
+              $isOverStock = !$isSoldOut && $basket->count > $basket->basketProduct->inventory;
+            @endphp
+            <div class="rounded bg-white m-4 p-4 basketCard {{ $isSoldOut ? 'basket-card-sold-out' : '' }}">
               <div class="">
-                <img src="/images/products/{{ $basket->basketProduct->img1 }}" alt="img" width="200">
+                @if ($basket->basketProduct)
+                  <img src="/images/products/{{ $basket->basketProduct->img1 }}" alt="{{ $basket->basketProduct->name_product }}" width="200">
+                @endif
               </div>
               <div class="d-flex flex-column justify-content-between align-items-start p-3">
-                <h5>{{ $basket->basketProduct->name_product }}</h5>
+                <div>
+                  <h5>{{ $basket->basketProduct?->name_product ?? 'Товар больше недоступен' }}</h5>
+                  @if ($isSoldOut)
+                    <span class="badge text-bg-secondary fs-6">Товар закончился</span>
+                  @elseif ($isOverStock)
+                    <div class="alert alert-warning py-2 mt-2 mb-0">В наличии только {{ $basket->basketProduct->inventory }} шт.</div>
+                  @endif
+                </div>
                 <form action="{{ route('deleteBasket') }}" method="post">
                   @csrf
                   <input type="text" hidden name="basket_id" value="{{ $basket->basket_id }}">
@@ -33,21 +53,21 @@
                 </form>
               </div>
               <div class="d-flex flex-column justify-content-between align-items-start p-3">
-                <h5>{{ $basket->basketProduct->price }} руб.</h5>
+                <h5>{{ $basket->basketProduct?->price ?? 0 }} руб.</h5>
                 <div class="d-inline-flex justify-content-center align-items-center gap-3">
                   <form action="{{ route('minusCountBasket') }}" method="post">
                     @csrf
                     <input type="text" hidden name="basket_id" value="{{ $basket->basket_id }}">
-                    <input type="submit" class="btn btn-light" id="btnMinus" value="-">
+                    <input type="submit" class="btn btn-light" value="-">
                   </form>
                     <p class="m-0">{{ $basket->count }}</p>
                   <form action="{{ route('plusCountBasket') }}" method="post">
                     @csrf
                     <input type="text" hidden name="basket_id" value="{{ $basket->basket_id }}">
-                    <input type="submit" class="btn btn-light" id="btnPlus" value="+">
+                    <input type="submit" class="btn btn-light" value="+" {{ $isSoldOut || $basket->count >= $basket->basketProduct->inventory ? 'disabled' : '' }}>
                   </form>
                 </div>
-                <h5>Итого: {{ $basket->basketProduct->price * $basket->count }}</h5>
+                <h5>Итого: {{ ($basket->basketProduct?->price ?? 0) * $basket->count }}</h5>
               </div>
             </div>
           @endforeach
@@ -62,8 +82,15 @@
           <p class="p-4 py-0">Наиенований: {{ $count_products }}</p>
           <p class="p-4 py-0">Всего товаров: {{ $totalCountProducts }}</p>
           <h3 class=" p-4 py-0">Итого: {{ $basket_price }}</h3>
+          @if ($hasUnavailableItems)
+            <div class="alert alert-warning mx-4">Удалите закончившиеся товары или уменьшите количество до доступного остатка.</div>
+          @endif
           <div class="p-4 py-2">
-            <a class="btn btn-primary w-100" href="{{ route('checkout') }}">Оформить заказ</a>
+            @if ($hasUnavailableItems)
+              <button class="btn btn-secondary w-100" disabled>Оформление недоступно</button>
+            @else
+              <a class="btn btn-primary w-100" href="{{ route('checkout') }}">Оформить заказ</a>
+            @endif
           </div>
         </div>
       </div>
@@ -73,19 +100,3 @@
   
   
 @endsection
-
-<script>
-document.addEventListener('DOMContentLoaded', ()=>{
-  const counter = document.getElementById('counter');
-  let count = 1
-
-  document.getElementById('btnMinus').addEventListener('click', ()=>{
-    if (counter.value > 1){
-      counter.value--;
-    }
-  });
-  document.getElementById('btnPlus').addEventListener('click', ()=>{
-    counter.value++
-  });
-})
-</script>

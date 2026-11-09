@@ -43,6 +43,10 @@
             {{ Auth::user()->firstname }}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            @if (Auth::user()->role === 'admin')
+            <li><a class="dropdown-item fw-semibold" href="{{ route('admin.dashboard') }}">Панель администратора</a></li>
+            <li><hr class="dropdown-divider"></li>
+            @endif
             <li><a class="dropdown-item" href="{{ route('profile') }}">Профиль</a></li>
             <li><a class="dropdown-item" href="{{ route('basket') }}">Корзина</a></li>
             <li><a class="dropdown-item" href="{{ route('orders') }}">Мои заказы</a></li>

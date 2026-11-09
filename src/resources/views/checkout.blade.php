@@ -4,6 +4,11 @@
 
 <div class="container">
   <h2 class="display-6 p-4">Оформление заказа</h2>
+  @if (isset($errors) && $errors->any())
+    <div class="alert alert-danger">
+      @foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach
+    </div>
+  @endif
   <div class="bg-light p-4 my-3">
   <p>Товаров: {{ $totalCountProducts }}</p>
     @foreach ($baskets as $basket)  
@@ -27,7 +32,6 @@
 
   <form action="{{ route('storeCheckuot') }}" method="post">
   @csrf
-  <input type="text" hidden name="sum" value="{{ $basket_price }}">
     <div class="bg-light my-3 p-4">
       <h4>Выберите способ оплаты:</h4>
       <div class="mt-3">

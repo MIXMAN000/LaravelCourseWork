@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    protected $primaryKey = 'id_product';
+    public $timestamps = false;
+    protected $guarded = [];
+
     function ProductCategory()
     {
       return $this->belongsTo(Category::class, 'id_category', 'id_category');

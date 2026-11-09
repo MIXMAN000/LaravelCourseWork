@@ -64,17 +64,21 @@ class indexController extends Controller
       return redirect()->route('login');
     }
     $count_products = $user->userBasket()->count();
-    $baskets = $user->userBasket()->get();
+    $baskets = $user->userBasket()->with('basketProduct')->get();
     $basket_price = $baskets->sum(function($item) {
-      return $item->count * $item->basketProduct->price;
+      return $item->count * ($item->basketProduct?->price ?? 0);
     });
     $totalCountProducts = $baskets->sum('count');
+    $hasUnavailableItems = $baskets->contains(fn ($item) =>
+      !$item->basketProduct || $item->basketProduct->inventory < $item->count
+    );
 
     return view('basket', [
       'count_products' => $count_products,
       'baskets' => $baskets,
       'basket_price' => $basket_price,
       'totalCountProducts' => $totalCountProducts,
+      'hasUnavailableItems' => $hasUnavailableItems,
     ]);
   }
 
@@ -84,7 +88,13 @@ class indexController extends Controller
     if (!$user){
       return redirect()->route('login');
     }
-    $baskets = $user->userBasket()->get();
+    $baskets = $user->userBasket()->with('basketProduct')->get();
+
+    if ($baskets->contains(fn ($item) =>
+      !$item->basketProduct || $item->basketProduct->inventory < $item->count
+    )) {
+      return redirect()->route('basket')->withErrors('В корзине есть закончившиеся товары или количество превышает остаток. Исправьте корзину перед оформлением.');
+    }
     $basket_price = $baskets->sum(function($item) {
       return $item->count * $item->basketProduct->price;
     });
